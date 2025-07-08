@@ -1,4 +1,4 @@
-##Passo a Passo de Setup (Instalação e Execução)
+## Passo a Passo de Setup (Instalação e Execução)
 
 Para configurar e rodar o projeto em sua máquina local, siga os passos abaixo:
 
@@ -23,7 +23,7 @@ pnpm install
 
 Caso queira rodar o projeto localmente, entrar em contato para envio da .env.local.
 
-##Inicie o Servidor de Desenvolvimento:
+## Inicie o Servidor de Desenvolvimento:
 
 Após configurar as variáveis de ambiente, inicie o servidor de desenvolvimento do Next.js.
 
@@ -37,7 +37,7 @@ pnpm dev
 
 A aplicação estará acessível em http://localhost:3000.
 
-##Como Rodar Mocks e Testes##
+## Como Rodar Mocks e Testes
 
 O projeto inclui testes unitários básicos configurados com Jest e React Testing Library.
 
@@ -55,5 +55,5 @@ pnpm test
 
 O Jest detectará automaticamente os arquivos de teste (ex: *.test.tsx) e os executará.
 
-###Mocks:
+### Mocks:
 As chamadas de API (fetch) são automaticamente mockadas nos testes unitários usando jest.spyOn(global, 'fetch') para simular as respostas da API de login, cadastro e verificação de token. Isso garante que os testes unitários sejam rápidos e isolados do backend real.
