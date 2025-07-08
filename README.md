@@ -1,7 +1,9 @@
-Passo a Passo de Setup (Instalação e Execução)
+##Passo a Passo de Setup (Instalação e Execução)##
+
 Para configurar e rodar o projeto em sua máquina local, siga os passos abaixo:
 
 Clone o Repositório:
+
 Abra seu terminal e execute o comando para clonar o projeto:
 
 ```
@@ -21,7 +23,8 @@ pnpm install
 
 Caso queira rodar o projeto localmente, entrar em contato para envio da .env.local.
 
-Inicie o Servidor de Desenvolvimento:
+##Inicie o Servidor de Desenvolvimento:##
+
 Após configurar as variáveis de ambiente, inicie o servidor de desenvolvimento do Next.js.
 
 ```
@@ -34,10 +37,12 @@ pnpm dev
 
 A aplicação estará acessível em http://localhost:3000.
 
-Como Rodar Mocks e Testes
+##Como Rodar Mocks e Testes##
+
 O projeto inclui testes unitários básicos configurados com Jest e React Testing Library.
 
-Executar Testes:
+##Executar Testes:##
+
 Para rodar todos os testes definidos no projeto:
 
 ```
