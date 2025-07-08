@@ -1,4 +1,3 @@
-// src/app/login/page.tsx
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -31,7 +30,6 @@ export default function LoginPage() {
   const router = useRouter();
   const { login, isAuthenticated, isLoading } = useAuth(); 
 
-  // Redireciona se já estiver autenticado
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       router.replace('/dashboard'); 
