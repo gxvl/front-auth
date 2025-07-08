@@ -1,4 +1,4 @@
-##Passo a Passo de Setup (Instalação e Execução)##
+#Passo a Passo de Setup (Instalação e Execução)#
 
 Para configurar e rodar o projeto em sua máquina local, siga os passos abaixo:
 
