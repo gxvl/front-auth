@@ -1,0 +1,133 @@
+# Q1.
+
+A diferença fundamental está na sintaxe e no gerenciamento de estado e ciclo de vida.
+Componentes de Classe: São classes ES6 que estendem React.Component. Usavam this.state para estado e métodos como componentDidMount para efeitos colaterais.
+Componentes Funcionais: São funções JavaScript. Com a introdução dos Hooks (useState, useEffect), eles agora podem gerenciar estado e ciclo de vida de forma mais simples e direta.
+Hoje, a prática padrão é usar componentes funcionais com Hooks para tudo. Eles são mais concisos, fáceis de ler e permitem reutilizar lógica com estado através de hooks personalizados. Componentes de classe são considerados legados e só devem ser usados ao dar manutenção em código antigo que ainda não foi modernizado.
+
+# Q2.
+
+JSX (JavaScript XML) é uma extensão de sintaxe que permite escrever uma estrutura semelhante a HTML dentro do código JavaScript. Ele torna a criação da interface de usuário (UI) mais declarativa e intuitiva.
+O navegador não entende JSX. Durante o processo de compilação, uma ferramenta como o Babel transforma o código JSX em chamadas da função React.createElement().
+
+Um código assim:
+<div className="container">
+  <h1>Olá, Mundo</h1>
+</div>
+
+seria transformado em algo como:
+
+React.createElement(
+  "div",
+  { className: "container" },
+  React.createElement("h1", null, "Olá, Mundo")
+);
+
+# Q3.
+
+Uma Protected Route verifica se o usuário está autenticado antes de renderizar a página. Caso não esteja, redireciona para o login. Com react-router-dom, a forma mais comum é criar um componente que utiliza o <Outlet /> para renderizar o conteúdo filho ou o <Navigate /> para redirecionar.
+
+return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+
+# Q4.
+
+Armazenar JWTs no localStorage é prático, mas vulnerável a ataques de Cross-Site Scripting (XSS), onde um script malicioso pode roubar o token.
+A abordagem mais segura é usar cookies com flags de segurança:
+HttpOnly, impedindo que o cookie seja acessado via JavaScript no cliente, mitigando o roubo por XSS.
+Secure, garantindo que o cookie só seja enviado em requisições HTTPS, protegendo contra ataques "man-in-the-middle".
+SameSite=Strict ou SameSite=Lax, protegendo contra ataques de Cross-Site Request Forgery (CSRF), controlando quando o navegador envia o cookie em requisições de outros domínios.
+
+# Q5.
+
+O Mock Service Worker (MSW) funciona interceptando as chamadas de API da sua aplicação diretamente no navegador. Você o configura com regras para simular diferentes respostas de um servidor, como um login bem-sucedido ou uma falha de autenticação.
+Isso permite que você desenvolva e teste a interface de usuário de forma completa e isolada, sem precisar que a API real esteja funcionando e sem alterar o código da sua aplicação.
+Você pode simular diferentes cenários, como:
+Login bem-sucedido: O handler responderia com um status de sucesso (código 200) e um corpo de resposta contendo um token de acesso falso e dados de um usuário fictício, imitando o comportamento de uma API real.
+Falha de autenticação: Outro handler poderia simular uma senha incorreta, respondendo com um status de erro (código 401 - Não Autorizado) e uma mensagem como "Credenciais inválidas".
+
+# Q6.
+Com Axios, o tratamento é mais direto, pois ele rejeita a promise para qualquer status de erro (4xx, 5xx). Pode-se usar interceptors para uma gestão centralizada ou um bloco try catch local. Nesse caso, o Axios já lança um erro com a resposta, facilitando o acesso ao status e mensagem de erro. (Daí, casos de erro como 404 ou 500 não rejeitam a promise, precisando verificar a propriedade response.ok).
+
+# Q7.
+
+import { useState, useCallback } from 'react';
+
+type LoginCredentials = {
+  email: string;
+  password: string;
+};
+
+interface UseAuthReturn {
+  isAuthenticated: boolean;
+  login: (credentials: LoginCredentials) => Promise<void>;
+  logout: () => void;
+}
+
+export const useAuth = (): UseAuthReturn => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return !!localStorage.getItem('user-token');
+  });
+
+  const login = useCallback(async (credentials: LoginCredentials) => {
+    localStorage.setItem('user-token', 'seu-token-jwt');
+    setIsAuthenticated(true);
+  }, []);
+
+  const logout = useCallback(() => {
+    localStorage.removeItem('user-token');
+    setIsAuthenticated(false);
+  }, []);
+
+  return { isAuthenticated, login, logout };
+};
+
+# Q8.
+
+Context API tem uma aplicação melhor para dados simples que mudam pouco (como tema, informações do usuário), evitando passar props por muitos níveis.
+Já o Redux é mais adequado para estados globais complexos e que mudam com frequência (como um carrinho de compras), onde a previsibilidade e as ferramentas de depuração são mais importantes.
+
+# Q9.
+
+Exemplo de teste com Jest e React Testing Library
+
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
+import LoginForm from './LoginForm';
+
+const server = setupServer(
+  http.post('/api/login', () => {
+    // Simula uma resposta de erro 401 (Não Autorizado)
+    return new HttpResponse(null, { status: 401 });
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+
+test('exibe mensagem de erro ao receber status 401 da API', async () => {
+  render(<LoginForm />);
+
+  fireEvent.change(screen.getByLabelText(/email/i), {
+    target: { value: 'usuario@teste.com' },
+  });
+  fireEvent.change(screen.getByLabelText(/senha/i), {
+    target: { value: 'senha-errada' },
+  });
+  fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
+  
+  // 3. Verificar se a mensagem de erro aparece na tela
+  const mensagemDeErro = await screen.findByText(/credenciais inválidas/i);
+
+  expect(mensagemDeErro).toBeInTheDocument();
+});
+
+# Q10.
+ Duas abordagens para otimizar performance de listas longas em React são:
+ 
+Virtualização (Windowing): Renderiza apenas os itens da lista que estão visíveis na tela. Conforme o usuário rola, os itens que saem de vista são removidos e os novos são adicionados, mantendo a performance alta independentemente do tamanho total da lista.
+Paginação / Rolagem Infinita: Carrega e exibe os itens em lotes (páginas). Uma nova página de itens só é buscada e renderizada quando o usuário rola até o final da lista atual, evitando a carga inicial de todos os dados de uma vez.
