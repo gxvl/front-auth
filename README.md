@@ -5,7 +5,7 @@ Clone o Repositório:
 Abra seu terminal e execute o comando para clonar o projeto:
 
 ```
-git clone <URL_DO_SEU_REPOSITORIO_AQUI>
+git clone https://github.com/gxvl/front-auth.git
 cd my-auth-app # Ou o nome da pasta que você escolheu
 Instale as Dependências:
 Utilize o pnpm (ou npm/yarn se preferir) para instalar todas as dependências do projeto:
