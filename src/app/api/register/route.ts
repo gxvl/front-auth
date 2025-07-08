@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/app/api/register/route.ts
 import User from '@/models/User';
 import { NextResponse } from 'next/server';
