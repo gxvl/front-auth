@@ -57,3 +57,11 @@ O Jest detectará automaticamente os arquivos de teste (ex: *.test.tsx) e os exe
 
 ### Mocks:
 As chamadas de API (fetch) são automaticamente mockadas nos testes unitários usando jest.spyOn(global, 'fetch') para simular as respostas da API de login, cadastro e verificação de token. Isso garante que os testes unitários sejam rápidos e isolados do backend real.
+
+## Explicação e resumo de decisões arquiteturais
+
+Este projeto foi construído com foco em eficiência. No frontend, utilizamos Next.js 14 (App Router) e Tailwind CSS para um desenvolvimento ágil e performance otimizada, com deploy facilitado na Vercel.
+
+Para a lógica de backend e dados, utilizei API Routes do Next.js, conectando-se ao MongoDB Atlas (nuvem) via Mongoose.js. A autenticação é gerenciada por JWTs armazenados no localStorage do cliente, com proteção de rotas feita nos layouts React do lado do cliente.
+
+O gerenciamento de estado é centralizado com a Context API do React. Validação de formulários é feita com React Hook Form e Zod, e notificações são exibidas usando Sonner.
